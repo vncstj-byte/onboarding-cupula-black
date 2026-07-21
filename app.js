@@ -77,6 +77,32 @@
     );
   }
 
+  /* ---------- Confirmação (modal próprio; confirm() é bloqueado no sandbox) ---------- */
+  const modal = document.getElementById("modal");
+  const modalMsg = document.getElementById("modal-msg");
+  const modalOk = document.getElementById("modal-ok");
+  const modalCancel = document.getElementById("modal-cancel");
+  let modalResolve = null;
+
+  function askConfirm(message, okLabel) {
+    modalMsg.textContent = message;
+    modalOk.textContent = okLabel || "Excluir";
+    modal.hidden = false;
+    return new Promise((resolve) => { modalResolve = resolve; });
+  }
+  function closeModal(result) {
+    modal.hidden = true;
+    const r = modalResolve;
+    modalResolve = null;
+    if (r) r(result);
+  }
+  modalOk.addEventListener("click", () => closeModal(true));
+  modalCancel.addEventListener("click", () => closeModal(false));
+  modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(false); });
+  document.addEventListener("keydown", (e) => {
+    if (!modal.hidden && e.key === "Escape") closeModal(false);
+  });
+
   /* ---------- Máscaras ---------- */
   function maskCPF(v) {
     v = v.replace(/\D/g, "").slice(0, 11);
@@ -274,14 +300,14 @@
   const membersCount = $("#members-count");
   const clearBtn = $("#clear-members");
 
-  clearBtn.addEventListener("click", () => {
+  clearBtn.addEventListener("click", async () => {
     const list = loadMembers();
     if (!list.length) return;
     const msg =
       list.length === 1
         ? "Excluir o cadastro salvo? Essa ação não pode ser desfeita."
         : `Excluir todos os ${list.length} cadastros? Essa ação não pode ser desfeita.`;
-    if (confirm(msg)) {
+    if (await askConfirm(msg, "Excluir tudo")) {
       saveMembers([]);
       renderMembers();
     }
@@ -312,7 +338,7 @@
       .join("");
   }
 
-  membersList.addEventListener("click", (e) => {
+  membersList.addEventListener("click", async (e) => {
     const btn = e.target.closest("button[data-act]");
     if (!btn) return;
     const id = e.target.closest(".member").dataset.id;
@@ -323,8 +349,9 @@
     if (btn.dataset.act === "play") openDeck(m);
     if (btn.dataset.act === "edit") fillForm(m);
     if (btn.dataset.act === "del") {
-      if (confirm(`Remover ${nomeExibicao(m)}?`)) {
-        saveMembers(list.filter((x) => x.id !== id));
+      const nome = nomeExibicao(m) || "este cadastro";
+      if (await askConfirm(`Excluir o cadastro de ${nome}?`)) {
+        saveMembers(loadMembers().filter((x) => x.id !== id));
         renderMembers();
       }
     }

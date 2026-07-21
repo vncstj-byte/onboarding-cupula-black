@@ -210,6 +210,26 @@ html, body {
 .btn--primary:hover { background: #e9e9e9; }
 .btn--ghost { background: transparent; color: var(--gray); border-color: var(--line); }
 .btn--ghost:hover { color: var(--white); border-color: rgba(255,255,255,0.4); }
+.btn--danger { background: var(--danger); color: #1a0000; }
+.btn--danger:hover { background: #ff8585; }
+
+/* ---------- Modal de confirmação ---------- */
+.modal {
+  position: fixed; inset: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0, 0, 0, 0.72); backdrop-filter: blur(4px);
+  padding: 20px;
+}
+.modal[hidden] { display: none; }
+.modal__box {
+  background: linear-gradient(180deg, var(--panel), var(--black-soft));
+  border: 1px solid var(--line); border-radius: 14px;
+  padding: 26px; max-width: 400px; width: 100%; box-shadow: var(--shadow);
+  animation: modalIn .2s var(--ease);
+}
+@keyframes modalIn { from { opacity: 0; transform: translateY(10px) scale(0.98); } to { opacity: 1; transform: none; } }
+.modal__msg { margin: 0 0 22px; font-size: 15px; line-height: 1.55; color: var(--white); }
+.modal__actions { display: flex; justify-content: flex-end; gap: 10px; }
 
 /* ---------- Members ---------- */
 .members__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
@@ -565,6 +585,17 @@ html, body {
     </div>
     <div class="deck__progress"><span id="deck-progress-bar"></span></div>
   </div>
+
+  <!-- ======================= MODAL DE CONFIRMAÇÃO ======================= -->
+  <div id="modal" class="modal" hidden>
+    <div class="modal__box" role="dialog" aria-modal="true">
+      <p class="modal__msg" id="modal-msg"></p>
+      <div class="modal__actions">
+        <button type="button" class="btn btn--ghost" id="modal-cancel">Cancelar</button>
+        <button type="button" class="btn btn--danger" id="modal-ok">Excluir</button>
+      </div>
+    </div>
+  </div>
 <script>
 /* =========================================================
    Cúpula Black · Onboarding — lógica da ferramenta
@@ -644,6 +675,32 @@ html, body {
       ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])
     );
   }
+
+  /* ---------- Confirmação (modal próprio; confirm() é bloqueado no sandbox) ---------- */
+  const modal = document.getElementById("modal");
+  const modalMsg = document.getElementById("modal-msg");
+  const modalOk = document.getElementById("modal-ok");
+  const modalCancel = document.getElementById("modal-cancel");
+  let modalResolve = null;
+
+  function askConfirm(message, okLabel) {
+    modalMsg.textContent = message;
+    modalOk.textContent = okLabel || "Excluir";
+    modal.hidden = false;
+    return new Promise((resolve) => { modalResolve = resolve; });
+  }
+  function closeModal(result) {
+    modal.hidden = true;
+    const r = modalResolve;
+    modalResolve = null;
+    if (r) r(result);
+  }
+  modalOk.addEventListener("click", () => closeModal(true));
+  modalCancel.addEventListener("click", () => closeModal(false));
+  modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(false); });
+  document.addEventListener("keydown", (e) => {
+    if (!modal.hidden && e.key === "Escape") closeModal(false);
+  });
 
   /* ---------- Máscaras ---------- */
   function maskCPF(v) {
@@ -842,14 +899,14 @@ html, body {
   const membersCount = $("#members-count");
   const clearBtn = $("#clear-members");
 
-  clearBtn.addEventListener("click", () => {
+  clearBtn.addEventListener("click", async () => {
     const list = loadMembers();
     if (!list.length) return;
     const msg =
       list.length === 1
         ? "Excluir o cadastro salvo? Essa ação não pode ser desfeita."
         : `Excluir todos os ${list.length} cadastros? Essa ação não pode ser desfeita.`;
-    if (confirm(msg)) {
+    if (await askConfirm(msg, "Excluir tudo")) {
       saveMembers([]);
       renderMembers();
     }
@@ -880,7 +937,7 @@ html, body {
       .join("");
   }
 
-  membersList.addEventListener("click", (e) => {
+  membersList.addEventListener("click", async (e) => {
     const btn = e.target.closest("button[data-act]");
     if (!btn) return;
     const id = e.target.closest(".member").dataset.id;
@@ -891,8 +948,9 @@ html, body {
     if (btn.dataset.act === "play") openDeck(m);
     if (btn.dataset.act === "edit") fillForm(m);
     if (btn.dataset.act === "del") {
-      if (confirm(`Remover ${nomeExibicao(m)}?`)) {
-        saveMembers(list.filter((x) => x.id !== id));
+      const nome = nomeExibicao(m) || "este cadastro";
+      if (await askConfirm(`Excluir o cadastro de ${nome}?`)) {
+        saveMembers(loadMembers().filter((x) => x.id !== id));
         renderMembers();
       }
     }
