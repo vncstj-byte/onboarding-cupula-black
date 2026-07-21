@@ -16,6 +16,11 @@
       // preenchido dinamicamente (nome do membro)
     },
     {
+      eyebrow: "Exclusividade",
+      title: "Prioridade<br /><span class=\"thin\">no Acesso</span>",
+      sub: "Preferência e prioridade em tudo o que a Cúpula Black oferece.",
+    },
+    {
       eyebrow: "O que é",
       title: "Mastermind<br /><span class=\"thin\">Puro</span>",
       sub: "Um ambiente fechado, de alto nível, onde os melhores se encontram para crescer juntos.",
@@ -49,11 +54,6 @@
       eyebrow: "Autoridade",
       title: "Palco na RED",
       sub: "Espaço no palco da RED e nas turmas do curso para membros da Black.",
-    },
-    {
-      eyebrow: "Exclusividade",
-      title: "Prioridade<br /><span class=\"thin\">no Acesso</span>",
-      sub: "Preferência e prioridade em tudo o que a Cúpula Black oferece.",
     },
     {
       type: "closing",
@@ -281,28 +281,39 @@
   let current = 0;
   let total = 0;
 
+  // Lockup do nome: tratamento discreto + primeiro nome em destaque
+  function nameLockup(m) {
+    const pre = m.tratamento
+      ? `<span class="welcome__pre">${escapeHTML(m.tratamento)}</span>`
+      : "";
+    const first = escapeHTML(m.apelido || m.nome || "");
+    return `<h1 class="welcome__name">${pre}<span class="welcome__first">${first}</span></h1>`;
+  }
+
   function buildSlide(slide, index, member) {
     const num = String(index).padStart(2, "0");
     let inner = "";
 
     if (slide.type === "welcome") {
       inner =
-        `<div class="slide__inner">` +
-        `<p class="slide__eyebrow">${slide.eyebrow}</p>` +
-        `<h1 class="slide__title">Boas-vindas à</h1>` +
-        `<div class="slide__cover-logo">${logoHTML("logo--lg")}</div>` +
-        `<div class="slide__welcome-name"><strong>${escapeHTML(nomeExibicao(member))}</strong></div>` +
-        `<div class="slide__signature">Mastermind Puro · 2026</div>` +
+        `<div class="slide__inner slide__inner--welcome">` +
+        `<div class="welcome__logo">${logoHTML("logo--md")}</div>` +
+        `<p class="welcome__eyebrow">${saudacao(member)},</p>` +
+        nameLockup(member) +
+        `<div class="welcome__rule"></div>` +
+        `<p class="welcome__lead">Boas-vindas à <strong>Cúpula Black</strong> — o Mastermind Puro.</p>` +
+        `<div class="slide__signature">Sua jornada começa aqui · 2026</div>` +
         `</div>`;
       return slideWrap("cover", num, inner);
     }
 
     if (slide.type === "closing") {
       inner =
-        `<div class="slide__inner">` +
-        `<p class="slide__eyebrow">${saudacao(member)},</p>` +
-        `<div class="slide__welcome-name" style="margin-top:0"><strong>${escapeHTML(nomeExibicao(member))}</strong></div>` +
-        `<div class="slide__cover-logo">${logoHTML("logo--lg")}</div>` +
+        `<div class="slide__inner slide__inner--welcome">` +
+        `<p class="welcome__eyebrow">${saudacao(member)},</p>` +
+        nameLockup(member) +
+        `<div class="welcome__rule"></div>` +
+        `<div class="welcome__logo welcome__logo--btm">${logoHTML("logo--md")}</div>` +
         `<div class="slide__signature">Nos vemos no topo · 2026</div>` +
         `</div>`;
       return slideWrap("cover", num, inner);
@@ -391,5 +402,6 @@
   });
 
   /* ---------- init ---------- */
+  $$("[data-logo]").forEach((el) => (el.innerHTML = logoHTML("logo--sm")));
   renderMembers();
 })();

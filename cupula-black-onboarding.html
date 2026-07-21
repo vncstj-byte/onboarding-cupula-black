@@ -52,37 +52,41 @@ html, body {
   display: inline-flex;
   align-items: stretch;
   font-weight: 800;
-  letter-spacing: 0.02em;
   line-height: 1;
   user-select: none;
+  white-space: nowrap;
+  --logo-border: 0.05em;
 }
 .logo__cupula {
   background: var(--white);
   color: #000;
-  padding: 0.30em 0.42em 0.26em;
+  padding: 0.34em 0.46em 0.29em;
   font-weight: 800;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.005em;
+  display: inline-flex;
+  align-items: center;
 }
 .logo__slash {
   color: var(--white);
   display: inline-flex;
   align-items: center;
-  padding: 0 0.12em;
-  font-weight: 700;
-  transform: translateY(-0.02em);
+  padding: 0 0.16em;
+  font-weight: 600;
+  font-size: 1.05em;
 }
 .logo__black {
-  border: 1.5px solid var(--white);
+  border: var(--logo-border) solid var(--white);
   color: var(--white);
-  padding: 0.30em 0.5em 0.26em;
-  letter-spacing: 0.34em;
+  padding: 0.34em 0.16em 0.29em 0.5em;
+  letter-spacing: 0.32em;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
 }
-.logo__black .gt { font-weight: 700; letter-spacing: 0; margin: 0 0.02em; }
-.logo--sm { font-size: 15px; }
-.logo--lg { font-size: clamp(30px, 6.4vw, 74px); }
+.logo__black .gt { font-weight: 800; letter-spacing: 0.14em; }
+.logo--sm { font-size: 15px; --logo-border: 1.5px; }
+.logo--md { font-size: clamp(19px, 3.2vw, 38px); --logo-border: 2px; }
+.logo--lg { font-size: clamp(30px, 6.4vw, 74px); --logo-border: 3px; }
 
 /* ---------- Topbar ---------- */
 .topbar {
@@ -283,18 +287,61 @@ html, body {
   letter-spacing: 0.01em;
 }
 
-/* Slide de capa / boas-vindas / encerramento */
+/* Slide de capa / boas-vindas / encerramento — foco no nome do membro */
 .slide--cover { align-items: center; text-align: center; }
-.slide--cover .slide__inner { display: flex; flex-direction: column; align-items: center; }
-.slide--cover .slide__eyebrow::before { display: none; }
-.slide--cover .slide__eyebrow { letter-spacing: 0.4em; }
-.slide__welcome-name {
-  margin-top: clamp(20px, 3.4vw, 40px);
-  font-size: clamp(22px, 3.6vw, 44px); font-weight: 300; color: var(--white);
+.slide__inner--welcome {
+  display: flex; flex-direction: column; align-items: center;
+  width: 100%; max-width: 1100px;
 }
-.slide__welcome-name strong { font-weight: 700; }
-.slide__cover-logo { margin: clamp(10px, 2vw, 22px) 0; }
-.slide__signature { margin-top: clamp(24px, 4vw, 46px); color: var(--gray-dim); font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase; }
+.welcome__logo { margin-bottom: clamp(22px, 4vw, 46px); }
+.welcome__logo--btm { margin: clamp(26px, 4vw, 44px) 0 0; }
+.welcome__eyebrow {
+  color: var(--gray); font-weight: 500;
+  font-size: clamp(12px, 1.5vw, 17px);
+  letter-spacing: 0.34em; text-transform: uppercase;
+  margin: 0 0 clamp(10px, 1.8vw, 20px);
+}
+.welcome__name {
+  margin: 0; line-height: 0.9; letter-spacing: -0.03em;
+  display: flex; flex-direction: column; align-items: center; gap: 0.04em;
+}
+.welcome__pre {
+  font-weight: 300; color: var(--gray);
+  font-size: clamp(20px, 3vw, 36px); letter-spacing: 0.06em;
+}
+.welcome__first {
+  font-weight: 800; color: var(--white);
+  font-size: clamp(54px, 13vw, 176px);
+  text-wrap: balance;
+}
+.welcome__rule {
+  width: clamp(56px, 9vw, 116px); height: 2px; background: var(--white);
+  margin: clamp(22px, 3.2vw, 40px) 0 clamp(18px, 2.6vw, 28px);
+  transform-origin: center;
+}
+.welcome__lead {
+  color: var(--gray); font-weight: 300; margin: 0;
+  font-size: clamp(15px, 2vw, 25px); max-width: 620px; line-height: 1.45;
+}
+.welcome__lead strong { color: var(--white); font-weight: 600; }
+.slide__signature {
+  margin-top: clamp(22px, 3.4vw, 40px); color: var(--gray-dim);
+  font-size: clamp(11px, 1.3vw, 13px); letter-spacing: 0.24em; text-transform: uppercase;
+}
+
+/* entrada animada (respeita prefers-reduced-motion) */
+@keyframes wRise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@keyframes wGrow { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
+.slide--cover.is-active .welcome__logo { animation: wRise .7s var(--ease) both; }
+.slide--cover.is-active .welcome__eyebrow { animation: wRise .7s .08s var(--ease) both; }
+.slide--cover.is-active .welcome__name { animation: wRise .85s .16s var(--ease) both; }
+.slide--cover.is-active .welcome__rule { animation: wGrow .7s .32s var(--ease) both; }
+.slide--cover.is-active .welcome__lead { animation: wRise .7s .42s var(--ease) both; }
+.slide--cover.is-active .slide__signature { animation: wRise .7s .5s var(--ease) both; }
+@media (prefers-reduced-motion: reduce) {
+  .slide--cover.is-active [class^="welcome__"],
+  .slide--cover.is-active .slide__signature { animation: none !important; }
+}
 
 /* ---------- Deck UI ---------- */
 .deck__ui {
@@ -483,6 +530,11 @@ html, body {
       // preenchido dinamicamente (nome do membro)
     },
     {
+      eyebrow: "Exclusividade",
+      title: "Prioridade<br /><span class=\"thin\">no Acesso</span>",
+      sub: "Preferência e prioridade em tudo o que a Cúpula Black oferece.",
+    },
+    {
       eyebrow: "O que é",
       title: "Mastermind<br /><span class=\"thin\">Puro</span>",
       sub: "Um ambiente fechado, de alto nível, onde os melhores se encontram para crescer juntos.",
@@ -516,11 +568,6 @@ html, body {
       eyebrow: "Autoridade",
       title: "Palco na RED",
       sub: "Espaço no palco da RED e nas turmas do curso para membros da Black.",
-    },
-    {
-      eyebrow: "Exclusividade",
-      title: "Prioridade<br /><span class=\"thin\">no Acesso</span>",
-      sub: "Preferência e prioridade em tudo o que a Cúpula Black oferece.",
     },
     {
       type: "closing",
@@ -748,28 +795,39 @@ html, body {
   let current = 0;
   let total = 0;
 
+  // Lockup do nome: tratamento discreto + primeiro nome em destaque
+  function nameLockup(m) {
+    const pre = m.tratamento
+      ? `<span class="welcome__pre">${escapeHTML(m.tratamento)}</span>`
+      : "";
+    const first = escapeHTML(m.apelido || m.nome || "");
+    return `<h1 class="welcome__name">${pre}<span class="welcome__first">${first}</span></h1>`;
+  }
+
   function buildSlide(slide, index, member) {
     const num = String(index).padStart(2, "0");
     let inner = "";
 
     if (slide.type === "welcome") {
       inner =
-        `<div class="slide__inner">` +
-        `<p class="slide__eyebrow">${slide.eyebrow}</p>` +
-        `<h1 class="slide__title">Boas-vindas à</h1>` +
-        `<div class="slide__cover-logo">${logoHTML("logo--lg")}</div>` +
-        `<div class="slide__welcome-name"><strong>${escapeHTML(nomeExibicao(member))}</strong></div>` +
-        `<div class="slide__signature">Mastermind Puro · 2026</div>` +
+        `<div class="slide__inner slide__inner--welcome">` +
+        `<div class="welcome__logo">${logoHTML("logo--md")}</div>` +
+        `<p class="welcome__eyebrow">${saudacao(member)},</p>` +
+        nameLockup(member) +
+        `<div class="welcome__rule"></div>` +
+        `<p class="welcome__lead">Boas-vindas à <strong>Cúpula Black</strong> — o Mastermind Puro.</p>` +
+        `<div class="slide__signature">Sua jornada começa aqui · 2026</div>` +
         `</div>`;
       return slideWrap("cover", num, inner);
     }
 
     if (slide.type === "closing") {
       inner =
-        `<div class="slide__inner">` +
-        `<p class="slide__eyebrow">${saudacao(member)},</p>` +
-        `<div class="slide__welcome-name" style="margin-top:0"><strong>${escapeHTML(nomeExibicao(member))}</strong></div>` +
-        `<div class="slide__cover-logo">${logoHTML("logo--lg")}</div>` +
+        `<div class="slide__inner slide__inner--welcome">` +
+        `<p class="welcome__eyebrow">${saudacao(member)},</p>` +
+        nameLockup(member) +
+        `<div class="welcome__rule"></div>` +
+        `<div class="welcome__logo welcome__logo--btm">${logoHTML("logo--md")}</div>` +
         `<div class="slide__signature">Nos vemos no topo · 2026</div>` +
         `</div>`;
       return slideWrap("cover", num, inner);
@@ -858,6 +916,7 @@ html, body {
   });
 
   /* ---------- init ---------- */
+  $$("[data-logo]").forEach((el) => (el.innerHTML = logoHTML("logo--sm")));
   renderMembers();
 })();
 
