@@ -16,14 +16,14 @@
       // preenchido dinamicamente (nome do membro)
     },
     {
-      eyebrow: "Exclusividade",
-      title: "Prioridade<br /><span class=\"thin\">no Acesso</span>",
-      sub: "Preferência e prioridade em tudo o que a Cúpula Black oferece.",
-    },
-    {
       eyebrow: "O que é",
       title: "Mastermind<br /><span class=\"thin\">Puro</span>",
       sub: "Um ambiente fechado, de alto nível, onde os melhores se encontram para crescer juntos.",
+    },
+    {
+      eyebrow: "Exclusividade",
+      title: "Prioridade<br /><span class=\"thin\">no Acesso</span>",
+      sub: "Preferência e prioridade em tudo o que a Cúpula Black oferece.",
     },
     {
       eyebrow: "Encontros",
