@@ -106,7 +106,10 @@
         <aside class="card members">
           <div class="members__head">
             <h2 class="members__title">Membros cadastrados</h2>
-            <span class="members__count" id="members-count">0</span>
+            <div class="members__headright">
+              <button type="button" class="members__clear" id="clear-members" hidden>Limpar tudo</button>
+              <span class="members__count" id="members-count">0</span>
+            </div>
           </div>
           <ul class="members__list" id="members-list"></ul>
           <p class="members__empty" id="members-empty">

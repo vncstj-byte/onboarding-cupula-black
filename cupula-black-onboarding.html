@@ -213,6 +213,14 @@ html, body {
 
 /* ---------- Members ---------- */
 .members__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.members__headright { display: flex; align-items: center; gap: 12px; }
+.members__clear {
+  background: transparent; border: 1px solid var(--line); color: var(--gray-dim);
+  font-family: inherit; font-size: 11.5px; letter-spacing: 0.04em;
+  padding: 6px 11px; border-radius: 7px; cursor: pointer; transition: all .18s;
+}
+.members__clear:hover { color: var(--danger); border-color: rgba(255, 107, 107, 0.5); }
+.members__clear[hidden] { display: none; }
 .members__title { font-size: 16px; font-weight: 600; margin: 0; letter-spacing: 0.01em; }
 .members__count {
   background: var(--white); color: #000; font-size: 12px; font-weight: 700;
@@ -519,7 +527,10 @@ html, body {
         <aside class="card members">
           <div class="members__head">
             <h2 class="members__title">Membros cadastrados</h2>
-            <span class="members__count" id="members-count">0</span>
+            <div class="members__headright">
+              <button type="button" class="members__clear" id="clear-members" hidden>Limpar tudo</button>
+              <span class="members__count" id="members-count">0</span>
+            </div>
           </div>
           <ul class="members__list" id="members-list"></ul>
           <p class="members__empty" id="members-empty">
@@ -828,11 +839,26 @@ html, body {
   const membersList = $("#members-list");
   const membersEmpty = $("#members-empty");
   const membersCount = $("#members-count");
+  const clearBtn = $("#clear-members");
+
+  clearBtn.addEventListener("click", () => {
+    const list = loadMembers();
+    if (!list.length) return;
+    const msg =
+      list.length === 1
+        ? "Excluir o cadastro salvo? Essa ação não pode ser desfeita."
+        : `Excluir todos os ${list.length} cadastros? Essa ação não pode ser desfeita.`;
+    if (confirm(msg)) {
+      saveMembers([]);
+      renderMembers();
+    }
+  });
 
   function renderMembers() {
     const list = loadMembers();
     membersCount.textContent = list.length;
     membersEmpty.style.display = list.length ? "none" : "block";
+    clearBtn.hidden = list.length === 0;
     membersList.innerHTML = list
       .map((m) => {
         const meta = [m.telefone, m.email].filter(Boolean).join(" · ");

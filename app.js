@@ -272,11 +272,26 @@
   const membersList = $("#members-list");
   const membersEmpty = $("#members-empty");
   const membersCount = $("#members-count");
+  const clearBtn = $("#clear-members");
+
+  clearBtn.addEventListener("click", () => {
+    const list = loadMembers();
+    if (!list.length) return;
+    const msg =
+      list.length === 1
+        ? "Excluir o cadastro salvo? Essa ação não pode ser desfeita."
+        : `Excluir todos os ${list.length} cadastros? Essa ação não pode ser desfeita.`;
+    if (confirm(msg)) {
+      saveMembers([]);
+      renderMembers();
+    }
+  });
 
   function renderMembers() {
     const list = loadMembers();
     membersCount.textContent = list.length;
     membersEmpty.style.display = list.length ? "none" : "block";
+    clearBtn.hidden = list.length === 0;
     membersList.innerHTML = list
       .map((m) => {
         const meta = [m.telefone, m.email].filter(Boolean).join(" · ");
