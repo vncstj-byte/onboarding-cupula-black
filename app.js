@@ -110,14 +110,42 @@
   }
 
   /* ---------- Saudação personalizada (gênero pelo tratamento) ---------- */
-  function saudacao(m) {
-    if (m.tratamento === "Dra.") return "Seja bem-vinda";
-    if (m.tratamento === "Dr.") return "Seja bem-vindo";
-    return "Seja bem-vindo(a)";
+  // Lista de pessoas a saudar: membro + sócio(a)s com nome preenchido
+  function getPeople(m) {
+    const people = [];
+    const main = (m.apelido || m.nome || "").trim();
+    if (main) people.push({ tratamento: m.tratamento || "", first: main });
+    (m.socios || []).forEach((s) => {
+      const f = (s.apelido || s.nome || "").trim();
+      if (f) people.push({ tratamento: s.tratamento || "", first: f });
+    });
+    return people;
   }
+
+  function saudacao(m) {
+    const ppl = getPeople(m);
+    if (ppl.length <= 1) {
+      const t = ppl.length ? ppl[0].tratamento : m.tratamento;
+      if (t === "Dra.") return "Seja bem-vinda";
+      if (t === "Dr.") return "Seja bem-vindo";
+      return "Seja bem-vindo(a)";
+    }
+    const allFem = ppl.every((p) => p.tratamento === "Dra.");
+    const allSet = ppl.every((p) => p.tratamento === "Dra." || p.tratamento === "Dr.");
+    if (allFem) return "Sejam bem-vindas";
+    if (allSet) return "Sejam bem-vindos";
+    return "Sejam bem-vindos(as)";
+  }
+
   function nomeExibicao(m) {
-    const trat = m.tratamento ? m.tratamento + " " : "";
-    return (trat + (m.apelido || m.nome || "")).trim();
+    const ppl = getPeople(m);
+    if (!ppl.length) {
+      const trat = m.tratamento ? m.tratamento + " " : "";
+      return (trat + (m.apelido || m.nome || "")).trim();
+    }
+    return ppl
+      .map((p) => (p.tratamento ? p.tratamento + " " : "") + p.first)
+      .join(" & ");
   }
 
   /* ---------- Armazenamento ---------- */
@@ -136,6 +164,40 @@
   const elCPF = $("#cpf");
   const elTel = $("#telefone");
   const cpfHint = $('[data-hint="cpf"]');
+
+  /* ---------- Sócio(a)s (dinâmico) ---------- */
+  const sociosList = $("#socios-list");
+  function socioRow(data) {
+    data = data || {};
+    const row = document.createElement("div");
+    row.className = "socio-row";
+    row.innerHTML =
+      `<select class="socio-trat">` +
+      `<option value="Dra.">Dra.</option>` +
+      `<option value="Dr.">Dr.</option>` +
+      `<option value="">Sem trat.</option>` +
+      `</select>` +
+      `<input type="text" class="socio-nome" placeholder="Nome do(a) sócio(a)" />` +
+      `<button type="button" class="iconbtn socio-del" title="Remover sócio(a)">✕</button>`;
+    row.querySelector(".socio-trat").value = data.tratamento != null ? data.tratamento : "Dra.";
+    row.querySelector(".socio-nome").value = data.apelido || data.nome || "";
+    row.querySelector(".socio-del").addEventListener("click", () => row.remove());
+    return row;
+  }
+  function addSocio(data, focus) {
+    const row = socioRow(data);
+    sociosList.appendChild(row);
+    if (focus) row.querySelector(".socio-nome").focus();
+  }
+  function collectSocios() {
+    return $$(".socio-row", sociosList)
+      .map((r) => ({
+        tratamento: r.querySelector(".socio-trat").value,
+        apelido: r.querySelector(".socio-nome").value.trim(),
+      }))
+      .filter((s) => s.apelido);
+  }
+  $("#add-socio").addEventListener("click", () => addSocio({}, true));
 
   elCPF.addEventListener("input", () => {
     elCPF.value = maskCPF(elCPF.value);
@@ -173,13 +235,14 @@
       cpf: elCPF.value.trim(),
       nascimento: $("#nascimento").value,
       endereco: $("#endereco").value.trim(),
+      socios: collectSocios(),
     };
 
     // Todos os campos são opcionais — a apresentação abre mesmo sem dados.
     // Só persistimos um membro quando há alguma informação preenchida.
     const temDados = !!(
       data.nome || data.apelido || data.telefone || data.email ||
-      data.cpf || data.nascimento || data.endereco
+      data.cpf || data.nascimento || data.endereco || data.socios.length
     );
 
     if (temDados) {
@@ -196,6 +259,7 @@
 
   form.addEventListener("reset", () => {
     editingId = null;
+    sociosList.innerHTML = "";
     elCPF.classList.remove("is-invalid");
     cpfHint.textContent = "";
     cpfHint.className = "field__hint";
@@ -261,6 +325,8 @@
     elCPF.value = m.cpf || "";
     $("#nascimento").value = m.nascimento || "";
     $("#endereco").value = m.endereco || "";
+    sociosList.innerHTML = "";
+    (m.socios || []).forEach((s) => addSocio(s, false));
     window.scrollTo({ top: 0, behavior: "smooth" });
     $("#nome").focus();
   }
@@ -276,20 +342,34 @@
   let current = 0;
   let total = 0;
 
-  // Lockup do nome: tratamento discreto + primeiro nome em destaque
+  // Lockup do nome: 1 pessoa = nome gigante; 2+ = nomes empilhados
   function nameLockup(m) {
-    const pre = m.tratamento
-      ? `<span class="welcome__pre">${escapeHTML(m.tratamento)}</span>`
-      : "";
-    const first = escapeHTML(m.apelido || m.nome || "");
-    return `<h1 class="welcome__name">${pre}<span class="welcome__first">${first}</span></h1>`;
+    const ppl = getPeople(m);
+
+    if (ppl.length <= 1) {
+      const p = ppl[0] || { tratamento: m.tratamento, first: m.apelido || m.nome || "" };
+      const pre = p.tratamento
+        ? `<span class="welcome__pre">${escapeHTML(p.tratamento)}</span>`
+        : "";
+      return `<h1 class="welcome__name">${pre}<span class="welcome__first">${escapeHTML(p.first)}</span></h1>`;
+    }
+
+    const items = ppl
+      .map((p) => {
+        const pre = p.tratamento
+          ? `<span class="welcome__pre--inline">${escapeHTML(p.tratamento)} </span>`
+          : "";
+        return `<span class="welcome__multi-item">${pre}${escapeHTML(p.first)}</span>`;
+      })
+      .join(`<span class="welcome__amp">&amp;</span>`);
+    return `<h1 class="welcome__name welcome__name--multi">${items}</h1>`;
   }
 
   function buildSlide(slide, index, member) {
     const num = String(index).padStart(2, "0");
     let inner = "";
 
-    const temNome = !!(member && (member.apelido || member.nome));
+    const temNome = getPeople(member).length > 0;
 
     if (slide.type === "welcome") {
       inner = temNome

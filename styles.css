@@ -170,6 +170,27 @@ html, body {
 
 .form__actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 26px; }
 
+/* ---------- Sócios ---------- */
+.form__note { color: var(--gray-dim); font-size: 12.5px; line-height: 1.55; margin: -8px 0 16px; max-width: 480px; }
+.socios { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+.socio-row { display: grid; grid-template-columns: 116px 1fr 40px; gap: 10px; align-items: center; }
+.socio-row select, .socio-row input {
+  background: var(--black); border: 1px solid var(--line); color: var(--white);
+  border-radius: 10px; padding: 12px 12px; font-size: 14px; font-family: inherit; width: 100%;
+  transition: border-color .2s var(--ease);
+}
+.socio-row input::placeholder { color: #565656; }
+.socio-row select:focus, .socio-row input:focus { outline: none; border-color: rgba(255,255,255,0.5); }
+.socio-row select {
+  appearance: none; cursor: pointer; padding-right: 30px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23a7a7a7' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 11px center;
+}
+.socio-del { width: 40px; height: 40px; }
+.btn--sm { padding: 10px 16px; font-size: 13px; }
+.socios__add { align-self: flex-start; margin-bottom: 4px; }
+@media (max-width: 560px) { .socio-row { grid-template-columns: 96px 1fr 40px; } }
+
 /* ---------- Buttons ---------- */
 .btn {
   font-family: inherit; font-size: 14px; font-weight: 600;
@@ -302,6 +323,20 @@ html, body {
   font-weight: 800; color: var(--white);
   font-size: clamp(54px, 13vw, 176px);
   text-wrap: balance;
+}
+/* dois ou mais nomes (membro + sócio) */
+.welcome__name--multi { flex-direction: column; gap: clamp(4px, 1vw, 12px); line-height: 1; }
+.welcome__multi-item {
+  font-weight: 800; color: var(--white); letter-spacing: -0.02em;
+  font-size: clamp(38px, 8.4vw, 104px); text-wrap: balance;
+}
+.welcome__pre--inline {
+  font-weight: 300; color: var(--gray); letter-spacing: 0.03em;
+  font-size: 0.4em;
+}
+.welcome__amp {
+  color: var(--gray); font-weight: 300; line-height: 1;
+  font-size: clamp(18px, 2.6vw, 34px);
 }
 .welcome__rule {
   width: clamp(56px, 9vw, 116px); height: 2px; background: var(--white);

@@ -15,6 +15,9 @@ boas-vindas personalizada com o nome e o tratamento do membro.
    - Como deseja ser chamado(a)
    - Telefone / WhatsApp, e-mail
    - CPF (validado automaticamente) e data de nascimento
+   - **Sócio(a)s**: se o membro tem sócio(a) ativo(a), adicione um ou mais
+     nomes — a apresentação dá as boas-vindas a todos (ex.: *Dra. Bianca &
+     Dr. Carlos*), ajustando a saudação para o plural
    - Endereço para envio do kit (opcional)
 3. Clique em **"Gerar apresentação →"**. A ferramenta abre a apresentação já
    personalizada, começando pela tela **"Boas-vindas à Cúpula Black"** com o
