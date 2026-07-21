@@ -40,46 +40,41 @@ html, body {
 .view--deck { position: fixed; inset: 0; z-index: 50; background: #000; }
 .view--deck.is-active { display: block; }
 
-/* ---------- Logo Cúpula Black ---------- */
+/* ---------- Logo Cúpula Black (empilhado, oficial) ---------- */
 .logo {
   display: inline-flex;
+  flex-direction: column;
   align-items: stretch;
-  font-weight: 800;
   line-height: 1;
   user-select: none;
-  white-space: nowrap;
-  --logo-border: 0.05em;
 }
 .logo__cupula {
-  background: var(--white);
-  color: #000;
-  padding: 0.34em 0.46em 0.29em;
-  font-weight: 800;
-  letter-spacing: 0.005em;
-  display: inline-flex;
-  align-items: center;
-}
-.logo__slash {
   color: var(--white);
-  display: inline-flex;
-  align-items: center;
-  padding: 0 0.16em;
-  font-weight: 600;
-  font-size: 1.05em;
+  font-weight: 800;
+  letter-spacing: -0.005em;
+  text-align: center;
+  white-space: nowrap;
 }
 .logo__black {
-  border: var(--logo-border) solid var(--white);
-  color: var(--white);
-  padding: 0.34em 0.16em 0.29em 0.5em;
-  letter-spacing: 0.32em;
-  font-weight: 600;
-  display: inline-flex;
+  background: var(--white);
+  margin-top: 0.08em;
+  display: flex;
   align-items: center;
+  justify-content: center;
+  padding: 0.22em 0.16em 0.17em;
 }
-.logo__black .gt { font-weight: 800; letter-spacing: 0.14em; }
-.logo--sm { font-size: 15px; --logo-border: 1.5px; }
-.logo--md { font-size: clamp(19px, 3.2vw, 38px); --logo-border: 2px; }
-.logo--lg { font-size: clamp(30px, 6.4vw, 74px); --logo-border: 3px; }
+.logo__blacktext {
+  color: #000;
+  font-weight: 700;
+  font-size: 0.585em;
+  letter-spacing: 0.4em;
+  padding-left: 0.4em; /* compensa o tracking à direita p/ centralizar */
+  white-space: nowrap;
+}
+.logo__blacktext .gt { font-weight: 600; }
+.logo--sm { font-size: 17px; }
+.logo--md { font-size: clamp(30px, 5.2vw, 60px); }
+.logo--lg { font-size: clamp(46px, 10vw, 120px); }
 
 /* ---------- Topbar ---------- */
 .topbar {
@@ -115,6 +110,7 @@ html, body {
   letter-spacing: -0.01em;
 }
 .central__sub { color: var(--gray); font-size: 15px; line-height: 1.6; margin: 0; max-width: 560px; }
+.central__sub strong { color: var(--white); font-weight: 600; }
 
 .central__grid {
   display: grid;

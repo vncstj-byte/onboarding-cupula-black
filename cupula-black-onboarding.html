@@ -47,46 +47,41 @@ html, body {
 .view--deck { position: fixed; inset: 0; z-index: 50; background: #000; }
 .view--deck.is-active { display: block; }
 
-/* ---------- Logo Cúpula Black ---------- */
+/* ---------- Logo Cúpula Black (empilhado, oficial) ---------- */
 .logo {
   display: inline-flex;
+  flex-direction: column;
   align-items: stretch;
-  font-weight: 800;
   line-height: 1;
   user-select: none;
-  white-space: nowrap;
-  --logo-border: 0.05em;
 }
 .logo__cupula {
-  background: var(--white);
-  color: #000;
-  padding: 0.34em 0.46em 0.29em;
-  font-weight: 800;
-  letter-spacing: 0.005em;
-  display: inline-flex;
-  align-items: center;
-}
-.logo__slash {
   color: var(--white);
-  display: inline-flex;
-  align-items: center;
-  padding: 0 0.16em;
-  font-weight: 600;
-  font-size: 1.05em;
+  font-weight: 800;
+  letter-spacing: -0.005em;
+  text-align: center;
+  white-space: nowrap;
 }
 .logo__black {
-  border: var(--logo-border) solid var(--white);
-  color: var(--white);
-  padding: 0.34em 0.16em 0.29em 0.5em;
-  letter-spacing: 0.32em;
-  font-weight: 600;
-  display: inline-flex;
+  background: var(--white);
+  margin-top: 0.08em;
+  display: flex;
   align-items: center;
+  justify-content: center;
+  padding: 0.22em 0.16em 0.17em;
 }
-.logo__black .gt { font-weight: 800; letter-spacing: 0.14em; }
-.logo--sm { font-size: 15px; --logo-border: 1.5px; }
-.logo--md { font-size: clamp(19px, 3.2vw, 38px); --logo-border: 2px; }
-.logo--lg { font-size: clamp(30px, 6.4vw, 74px); --logo-border: 3px; }
+.logo__blacktext {
+  color: #000;
+  font-weight: 700;
+  font-size: 0.585em;
+  letter-spacing: 0.4em;
+  padding-left: 0.4em; /* compensa o tracking à direita p/ centralizar */
+  white-space: nowrap;
+}
+.logo__blacktext .gt { font-weight: 600; }
+.logo--sm { font-size: 17px; }
+.logo--md { font-size: clamp(30px, 5.2vw, 60px); }
+.logo--lg { font-size: clamp(46px, 10vw, 120px); }
 
 /* ---------- Topbar ---------- */
 .topbar {
@@ -122,6 +117,7 @@ html, body {
   letter-spacing: -0.01em;
 }
 .central__sub { color: var(--gray); font-size: 15px; line-height: 1.6; margin: 0; max-width: 560px; }
+.central__sub strong { color: var(--white); font-weight: 600; }
 
 .central__grid {
   display: grid;
@@ -405,8 +401,9 @@ html, body {
         <p class="eyebrow">Etapa 1 · Cadastro do Membro</p>
         <h1 class="central__title">Preencha os dados para gerar<br />a apresentação personalizada</h1>
         <p class="central__sub">
-          As informações abaixo alimentam o kit de boas-vindas e personalizam a
-          apresentação de entrada na Cúpula Black.
+          As informações abaixo personalizam a apresentação e alimentam o kit de
+          boas-vindas. <strong>Todos os campos são opcionais</strong> — você pode
+          abrir o material sem preencher nada.
         </p>
       </div>
 
@@ -415,23 +412,23 @@ html, body {
         <form id="form-membro" class="card form" autocomplete="off" novocomplete>
           <div class="form__row">
             <label class="field field--full">
-              <span class="field__label">Nome completo do advogado(a) <i>*</i></span>
-              <input type="text" id="nome" name="nome" placeholder="Ex.: Bianca Almeida Nogueira" required />
+              <span class="field__label">Nome completo do advogado(a)</span>
+              <input type="text" id="nome" name="nome" placeholder="Ex.: Bianca Almeida Nogueira" />
             </label>
           </div>
 
           <div class="form__row">
             <label class="field">
-              <span class="field__label">Tratamento <i>*</i></span>
-              <select id="tratamento" name="tratamento" required>
+              <span class="field__label">Tratamento</span>
+              <select id="tratamento" name="tratamento">
                 <option value="Dra.">Dra. (Doutora)</option>
                 <option value="Dr.">Dr. (Doutor)</option>
                 <option value="">Sem tratamento</option>
               </select>
             </label>
             <label class="field">
-              <span class="field__label">Como deseja ser chamado(a) <i>*</i></span>
-              <input type="text" id="apelido" name="apelido" placeholder="Ex.: Bianca" required />
+              <span class="field__label">Como deseja ser chamado(a)</span>
+              <input type="text" id="apelido" name="apelido" placeholder="Ex.: Bianca" />
             </label>
           </div>
 
@@ -439,8 +436,8 @@ html, body {
 
           <div class="form__row">
             <label class="field">
-              <span class="field__label">Telefone / WhatsApp <i>*</i></span>
-              <input type="tel" id="telefone" name="telefone" inputmode="numeric" placeholder="(00) 00000-0000" required />
+              <span class="field__label">Telefone / WhatsApp</span>
+              <input type="tel" id="telefone" name="telefone" inputmode="numeric" placeholder="(00) 00000-0000" />
             </label>
             <label class="field">
               <span class="field__label">E-mail</span>
@@ -450,13 +447,13 @@ html, body {
 
           <div class="form__row">
             <label class="field">
-              <span class="field__label">CPF <i>*</i></span>
-              <input type="text" id="cpf" name="cpf" inputmode="numeric" placeholder="000.000.000-00" required />
+              <span class="field__label">CPF</span>
+              <input type="text" id="cpf" name="cpf" inputmode="numeric" placeholder="000.000.000-00" />
               <span class="field__hint" data-hint="cpf"></span>
             </label>
             <label class="field">
-              <span class="field__label">Data de nascimento <i>*</i></span>
-              <input type="date" id="nascimento" name="nascimento" required />
+              <span class="field__label">Data de nascimento</span>
+              <input type="date" id="nascimento" name="nascimento" />
             </label>
           </div>
 
@@ -582,8 +579,7 @@ html, body {
   const logoHTML = (variant = "") =>
     `<span class="logo ${variant}">` +
     `<span class="logo__cupula">CÚPULA</span>` +
-    `<span class="logo__slash">\\</span>` +
-    `<span class="logo__black">BL<span class="gt">&gt;</span>CK</span>` +
+    `<span class="logo__black"><span class="logo__blacktext">BL<span class="gt">&gt;</span>CK</span></span>` +
     `</span>`;
 
   function escapeHTML(str) {
@@ -690,26 +686,22 @@ html, body {
       endereco: $("#endereco").value.trim(),
     };
 
-    if (!data.nome || !data.apelido || !data.telefone || !data.cpf || !data.nascimento) {
-      alert("Preencha todos os campos obrigatórios (*).");
-      return;
-    }
-    if (!isValidCPF(data.cpf)) {
-      elCPF.classList.add("is-invalid");
-      cpfHint.textContent = "CPF inválido — verifique os números.";
-      cpfHint.className = "field__hint is-error";
-      elCPF.focus();
-      return;
-    }
+    // Todos os campos são opcionais — a apresentação abre mesmo sem dados.
+    // Só persistimos um membro quando há alguma informação preenchida.
+    const temDados = !!(
+      data.nome || data.apelido || data.telefone || data.email ||
+      data.cpf || data.nascimento || data.endereco
+    );
 
-    // salvar / atualizar
-    const list = loadMembers();
-    const idx = list.findIndex((x) => x.id === data.id);
-    if (idx >= 0) list[idx] = data; else list.unshift(data);
-    saveMembers(list);
+    if (temDados) {
+      const list = loadMembers();
+      const idx = list.findIndex((x) => x.id === data.id);
+      if (idx >= 0) list[idx] = data; else list.unshift(data);
+      saveMembers(list);
+      renderMembers();
+    }
 
     editingId = null;
-    renderMembers();
     openDeck(data);
   });
 
@@ -808,28 +800,42 @@ html, body {
     const num = String(index).padStart(2, "0");
     let inner = "";
 
+    const temNome = !!(member && (member.apelido || member.nome));
+
     if (slide.type === "welcome") {
-      inner =
-        `<div class="slide__inner slide__inner--welcome">` +
-        `<div class="welcome__logo">${logoHTML("logo--md")}</div>` +
-        `<p class="welcome__eyebrow">${saudacao(member)},</p>` +
-        nameLockup(member) +
-        `<div class="welcome__rule"></div>` +
-        `<p class="welcome__lead">Boas-vindas à <strong>Cúpula Black</strong> — o Mastermind Puro.</p>` +
-        `<div class="slide__signature">Sua jornada começa aqui · 2026</div>` +
-        `</div>`;
+      inner = temNome
+        ? `<div class="slide__inner slide__inner--welcome">` +
+          `<div class="welcome__logo">${logoHTML("logo--md")}</div>` +
+          `<p class="welcome__eyebrow">${saudacao(member)},</p>` +
+          nameLockup(member) +
+          `<div class="welcome__rule"></div>` +
+          `<p class="welcome__lead">Boas-vindas à <strong>Cúpula Black</strong> — o Mastermind Puro.</p>` +
+          `<div class="slide__signature">Sua jornada começa aqui · 2026</div>` +
+          `</div>`
+        : `<div class="slide__inner slide__inner--welcome">` +
+          `<p class="welcome__eyebrow">Boas-vindas à</p>` +
+          `<div class="welcome__logo welcome__logo--hero">${logoHTML("logo--lg")}</div>` +
+          `<div class="welcome__rule"></div>` +
+          `<p class="welcome__lead">O <strong>Mastermind Puro</strong>. Sua jornada começa aqui.</p>` +
+          `<div class="slide__signature">Cúpula Black · 2026</div>` +
+          `</div>`;
       return slideWrap("cover", num, inner);
     }
 
     if (slide.type === "closing") {
-      inner =
-        `<div class="slide__inner slide__inner--welcome">` +
-        `<p class="welcome__eyebrow">${saudacao(member)},</p>` +
-        nameLockup(member) +
-        `<div class="welcome__rule"></div>` +
-        `<div class="welcome__logo welcome__logo--btm">${logoHTML("logo--md")}</div>` +
-        `<div class="slide__signature">Nos vemos no topo · 2026</div>` +
-        `</div>`;
+      inner = temNome
+        ? `<div class="slide__inner slide__inner--welcome">` +
+          `<p class="welcome__eyebrow">${saudacao(member)},</p>` +
+          nameLockup(member) +
+          `<div class="welcome__rule"></div>` +
+          `<div class="welcome__logo welcome__logo--btm">${logoHTML("logo--md")}</div>` +
+          `<div class="slide__signature">Nos vemos no topo · 2026</div>` +
+          `</div>`
+        : `<div class="slide__inner slide__inner--welcome">` +
+          `<div class="welcome__logo welcome__logo--hero">${logoHTML("logo--lg")}</div>` +
+          `<div class="welcome__rule"></div>` +
+          `<div class="slide__signature">Nos vemos no topo · 2026</div>` +
+          `</div>`;
       return slideWrap("cover", num, inner);
     }
 

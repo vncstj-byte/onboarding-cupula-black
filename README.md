@@ -8,7 +8,8 @@ boas-vindas personalizada com o nome e o tratamento do membro.
 
 1. Abra o arquivo **`index.html`** em qualquer navegador (Chrome, Edge, Safari…).
    Não precisa de servidor nem instalação.
-2. **Etapa 1 — Cadastro:** preencha os dados do membro:
+2. **Etapa 1 — Cadastro:** preencha os dados do membro (**todos os campos são
+   opcionais** — dá para abrir o material sem preencher nada):
    - Nome completo do advogado(a)
    - Tratamento (Dr. / Dra. / sem tratamento)
    - Como deseja ser chamado(a)

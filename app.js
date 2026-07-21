@@ -68,8 +68,7 @@
   const logoHTML = (variant = "") =>
     `<span class="logo ${variant}">` +
     `<span class="logo__cupula">CÚPULA</span>` +
-    `<span class="logo__slash">\\</span>` +
-    `<span class="logo__black">BL<span class="gt">&gt;</span>CK</span>` +
+    `<span class="logo__black"><span class="logo__blacktext">BL<span class="gt">&gt;</span>CK</span></span>` +
     `</span>`;
 
   function escapeHTML(str) {
@@ -176,26 +175,22 @@
       endereco: $("#endereco").value.trim(),
     };
 
-    if (!data.nome || !data.apelido || !data.telefone || !data.cpf || !data.nascimento) {
-      alert("Preencha todos os campos obrigatórios (*).");
-      return;
-    }
-    if (!isValidCPF(data.cpf)) {
-      elCPF.classList.add("is-invalid");
-      cpfHint.textContent = "CPF inválido — verifique os números.";
-      cpfHint.className = "field__hint is-error";
-      elCPF.focus();
-      return;
-    }
+    // Todos os campos são opcionais — a apresentação abre mesmo sem dados.
+    // Só persistimos um membro quando há alguma informação preenchida.
+    const temDados = !!(
+      data.nome || data.apelido || data.telefone || data.email ||
+      data.cpf || data.nascimento || data.endereco
+    );
 
-    // salvar / atualizar
-    const list = loadMembers();
-    const idx = list.findIndex((x) => x.id === data.id);
-    if (idx >= 0) list[idx] = data; else list.unshift(data);
-    saveMembers(list);
+    if (temDados) {
+      const list = loadMembers();
+      const idx = list.findIndex((x) => x.id === data.id);
+      if (idx >= 0) list[idx] = data; else list.unshift(data);
+      saveMembers(list);
+      renderMembers();
+    }
 
     editingId = null;
-    renderMembers();
     openDeck(data);
   });
 
@@ -294,28 +289,42 @@
     const num = String(index).padStart(2, "0");
     let inner = "";
 
+    const temNome = !!(member && (member.apelido || member.nome));
+
     if (slide.type === "welcome") {
-      inner =
-        `<div class="slide__inner slide__inner--welcome">` +
-        `<div class="welcome__logo">${logoHTML("logo--md")}</div>` +
-        `<p class="welcome__eyebrow">${saudacao(member)},</p>` +
-        nameLockup(member) +
-        `<div class="welcome__rule"></div>` +
-        `<p class="welcome__lead">Boas-vindas à <strong>Cúpula Black</strong> — o Mastermind Puro.</p>` +
-        `<div class="slide__signature">Sua jornada começa aqui · 2026</div>` +
-        `</div>`;
+      inner = temNome
+        ? `<div class="slide__inner slide__inner--welcome">` +
+          `<div class="welcome__logo">${logoHTML("logo--md")}</div>` +
+          `<p class="welcome__eyebrow">${saudacao(member)},</p>` +
+          nameLockup(member) +
+          `<div class="welcome__rule"></div>` +
+          `<p class="welcome__lead">Boas-vindas à <strong>Cúpula Black</strong> — o Mastermind Puro.</p>` +
+          `<div class="slide__signature">Sua jornada começa aqui · 2026</div>` +
+          `</div>`
+        : `<div class="slide__inner slide__inner--welcome">` +
+          `<p class="welcome__eyebrow">Boas-vindas à</p>` +
+          `<div class="welcome__logo welcome__logo--hero">${logoHTML("logo--lg")}</div>` +
+          `<div class="welcome__rule"></div>` +
+          `<p class="welcome__lead">O <strong>Mastermind Puro</strong>. Sua jornada começa aqui.</p>` +
+          `<div class="slide__signature">Cúpula Black · 2026</div>` +
+          `</div>`;
       return slideWrap("cover", num, inner);
     }
 
     if (slide.type === "closing") {
-      inner =
-        `<div class="slide__inner slide__inner--welcome">` +
-        `<p class="welcome__eyebrow">${saudacao(member)},</p>` +
-        nameLockup(member) +
-        `<div class="welcome__rule"></div>` +
-        `<div class="welcome__logo welcome__logo--btm">${logoHTML("logo--md")}</div>` +
-        `<div class="slide__signature">Nos vemos no topo · 2026</div>` +
-        `</div>`;
+      inner = temNome
+        ? `<div class="slide__inner slide__inner--welcome">` +
+          `<p class="welcome__eyebrow">${saudacao(member)},</p>` +
+          nameLockup(member) +
+          `<div class="welcome__rule"></div>` +
+          `<div class="welcome__logo welcome__logo--btm">${logoHTML("logo--md")}</div>` +
+          `<div class="slide__signature">Nos vemos no topo · 2026</div>` +
+          `</div>`
+        : `<div class="slide__inner slide__inner--welcome">` +
+          `<div class="welcome__logo welcome__logo--hero">${logoHTML("logo--lg")}</div>` +
+          `<div class="welcome__rule"></div>` +
+          `<div class="slide__signature">Nos vemos no topo · 2026</div>` +
+          `</div>`;
       return slideWrap("cover", num, inner);
     }
 

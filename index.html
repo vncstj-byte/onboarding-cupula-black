@@ -23,8 +23,9 @@
         <p class="eyebrow">Etapa 1 · Cadastro do Membro</p>
         <h1 class="central__title">Preencha os dados para gerar<br />a apresentação personalizada</h1>
         <p class="central__sub">
-          As informações abaixo alimentam o kit de boas-vindas e personalizam a
-          apresentação de entrada na Cúpula Black.
+          As informações abaixo personalizam a apresentação e alimentam o kit de
+          boas-vindas. <strong>Todos os campos são opcionais</strong> — você pode
+          abrir o material sem preencher nada.
         </p>
       </div>
 
@@ -33,23 +34,23 @@
         <form id="form-membro" class="card form" autocomplete="off" novocomplete>
           <div class="form__row">
             <label class="field field--full">
-              <span class="field__label">Nome completo do advogado(a) <i>*</i></span>
-              <input type="text" id="nome" name="nome" placeholder="Ex.: Bianca Almeida Nogueira" required />
+              <span class="field__label">Nome completo do advogado(a)</span>
+              <input type="text" id="nome" name="nome" placeholder="Ex.: Bianca Almeida Nogueira" />
             </label>
           </div>
 
           <div class="form__row">
             <label class="field">
-              <span class="field__label">Tratamento <i>*</i></span>
-              <select id="tratamento" name="tratamento" required>
+              <span class="field__label">Tratamento</span>
+              <select id="tratamento" name="tratamento">
                 <option value="Dra.">Dra. (Doutora)</option>
                 <option value="Dr.">Dr. (Doutor)</option>
                 <option value="">Sem tratamento</option>
               </select>
             </label>
             <label class="field">
-              <span class="field__label">Como deseja ser chamado(a) <i>*</i></span>
-              <input type="text" id="apelido" name="apelido" placeholder="Ex.: Bianca" required />
+              <span class="field__label">Como deseja ser chamado(a)</span>
+              <input type="text" id="apelido" name="apelido" placeholder="Ex.: Bianca" />
             </label>
           </div>
 
@@ -57,8 +58,8 @@
 
           <div class="form__row">
             <label class="field">
-              <span class="field__label">Telefone / WhatsApp <i>*</i></span>
-              <input type="tel" id="telefone" name="telefone" inputmode="numeric" placeholder="(00) 00000-0000" required />
+              <span class="field__label">Telefone / WhatsApp</span>
+              <input type="tel" id="telefone" name="telefone" inputmode="numeric" placeholder="(00) 00000-0000" />
             </label>
             <label class="field">
               <span class="field__label">E-mail</span>
@@ -68,13 +69,13 @@
 
           <div class="form__row">
             <label class="field">
-              <span class="field__label">CPF <i>*</i></span>
-              <input type="text" id="cpf" name="cpf" inputmode="numeric" placeholder="000.000.000-00" required />
+              <span class="field__label">CPF</span>
+              <input type="text" id="cpf" name="cpf" inputmode="numeric" placeholder="000.000.000-00" />
               <span class="field__hint" data-hint="cpf"></span>
             </label>
             <label class="field">
-              <span class="field__label">Data de nascimento <i>*</i></span>
-              <input type="date" id="nascimento" name="nascimento" required />
+              <span class="field__label">Data de nascimento</span>
+              <input type="date" id="nascimento" name="nascimento" />
             </label>
           </div>
 
