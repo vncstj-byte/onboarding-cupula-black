@@ -238,6 +238,7 @@ html, body {
 }
 .iconbtn:hover { color: var(--white); border-color: rgba(255,255,255,0.4); }
 .iconbtn--play:hover { background: var(--white); color: #000; }
+.iconbtn--del:hover { color: var(--danger); border-color: rgba(255, 107, 107, 0.55); background: rgba(255, 107, 107, 0.08); }
 .members__empty { color: var(--gray-dim); font-size: 13px; line-height: 1.6; margin: 12px 2px 0; }
 
 .footpad {

@@ -304,7 +304,7 @@
           `<div class="member__actions">` +
           `<button class="iconbtn iconbtn--play" data-act="play" title="Abrir apresentação">▶</button>` +
           `<button class="iconbtn" data-act="edit" title="Editar">✎</button>` +
-          `<button class="iconbtn" data-act="del" title="Remover">🗑</button>` +
+          `<button class="iconbtn iconbtn--del" data-act="del" title="Excluir este cadastro">🗑</button>` +
           `</div>` +
           `</li>`
         );
