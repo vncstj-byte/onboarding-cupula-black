@@ -52,8 +52,8 @@
     },
     {
       eyebrow: "Autoridade",
-      title: "Palco na RED",
-      sub: "Espaço no palco da RED e nas turmas do curso para membros da Black.",
+      title: "Palco",
+      sub: "Espaço no palco e nas turmas do curso para os membros da Black.",
     },
     {
       type: "closing",
