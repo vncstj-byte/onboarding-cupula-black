@@ -16,6 +16,10 @@
       // preenchido dinamicamente (nome do membro)
     },
     {
+      type: "concierge",
+      eyebrow: "Sua concierge",
+    },
+    {
       eyebrow: "O que é",
       title: "Mastermind<br /><span class=\"thin\">Puro</span>",
       sub: "Um ambiente fechado, de alto nível, onde os melhores se encontram para crescer juntos.",
@@ -430,6 +434,18 @@
           `<p class="welcome__lead">O <strong>Mastermind Puro</strong>. Sua jornada começa aqui.</p>` +
           `<div class="slide__signature">Cúpula Black · 2026</div>` +
           `</div>`;
+      return slideWrap("cover", num, inner);
+    }
+
+    if (slide.type === "concierge") {
+      inner =
+        `<div class="slide__inner slide__inner--welcome">` +
+        `<p class="welcome__eyebrow">Sua concierge</p>` +
+        `<h1 class="welcome__name"><span class="welcome__first">Bianca</span></h1>` +
+        `<div class="welcome__rule"></div>` +
+        `<p class="welcome__lead"><strong>Concierge do Master</strong>. Vou acompanhar você em toda a jornada na Cúpula Black — do primeiro dia ao topo — e estarei à disposição para tudo o que você precisar.</p>` +
+        `<div class="slide__signature">Ao seu lado em cada etapa · 2026</div>` +
+        `</div>`;
       return slideWrap("cover", num, inner);
     }
 
